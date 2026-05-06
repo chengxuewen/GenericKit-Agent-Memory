@@ -1,41 +1,60 @@
 # GenericKit-Agent-Memory
 
-AI agent memory storage submodule for the [GenericKit](https://gitee.com/chengxuewen/GenericKit) project.
+GenericKit 项目的 AI 代理记忆存储子仓库。
 
-## Purpose
+## 用途
 
-This repository is a Git submodule of GenericKit (located at `.agents/GenericKit-Agent-Memory/`),
-storing AI development session memory data via the `opencode-mem0` plugin.
+此仓库作为 [GenericKit](https://gitee.com/chengxuewen/GenericKit) 项目的 Git 子模块，
+通过 **mem0 MCP** 存储 AI 开发会话的记忆数据，支持 Claude Code、OpenCode、Codex 等多个代理平台。
 
-## Configuration
+## 配置
 
-In GenericKit's `.opencode/opencode.json`:
+### MCP Server（跨平台通用）
 
+`.mcp.json`：
 ```json
 {
-  "plugin": ["opencode-mem0"],
-  "mem0": {
-    "storage_dir": ".agents/GenericKit-Agent-Memory"
+  "mcpServers": {
+    "mem0": {
+      "command": "npx",
+      "args": ["-y", "@mem0/mcp"],
+      "env": { "MEM0_DIR": ".agents/GenericKit-Agent-Memory" }
+    }
   }
 }
 ```
 
-## Directory Structure
+### OpenCode 专用
+
+`.opencode/opencode.json`：
+```json
+{
+  "mcp": {
+    "mem0": {
+      "command": "npx",
+      "args": ["-y", "@mem0/mcp"],
+      "env": { "MEM0_DIR": ".agents/GenericKit-Agent-Memory" }
+    }
+  }
+}
+```
+
+### Claude Code
+
+直接引用 `.mcp.json`，无需额外配置。
+
+## 目录结构
 
 ```
 .agents/GenericKit-Agent-Memory/
-├── README.md                   # This file (Chinese)
+├── README.md                   # 本文件
 ├── README.en.md                # English version
-├── SESSION-YYYY-MM-DD.md       # Per-session development summaries
-└── ...                         # mem0 plugin managed files
+├── SESSION-YYYY-MM-DD.md       # 各次开发会话摘要
+└── ...                         # mem0 自动管理的记忆文件
 ```
 
-## Submodule Management
+## 子模块管理
 
 ```bash
-# Clone with submodules
 git clone --recurse-submodules https://gitee.com/chengxuewen/GenericKit.git
-
-# Update memory to latest
-cd .agents/GenericKit-Agent-Memory && git pull origin master
 ```
