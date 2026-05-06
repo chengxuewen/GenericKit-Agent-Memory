@@ -1,36 +1,41 @@
 # GenericKit-Agent-Memory
 
-#### Description
-{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
+AI agent memory storage submodule for the [GenericKit](https://gitee.com/chengxuewen/GenericKit) project.
 
-#### Software Architecture
-Software architecture description
+## Purpose
 
-#### Installation
+This repository is a Git submodule of GenericKit (located at `.agents/GenericKit-Agent-Memory/`),
+storing AI development session memory data via the `opencode-mem0` plugin.
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Configuration
 
-#### Instructions
+In GenericKit's `.opencode/opencode.json`:
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```json
+{
+  "plugin": ["opencode-mem0"],
+  "mem0": {
+    "storage_dir": ".agents/GenericKit-Agent-Memory"
+  }
+}
+```
 
-#### Contribution
+## Directory Structure
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+```
+.agents/GenericKit-Agent-Memory/
+├── README.md                   # Chinese version
+├── README.en.md                # This file (English)
+├── SESSION-YYYY-MM-DD.md       # Per-session development summaries
+└── ...                         # mem0 plugin managed files
+```
 
+## Submodule Management
 
-#### Gitee Feature
+```bash
+# Clone with submodules
+git clone --recurse-submodules https://gitee.com/chengxuewen/GenericKit.git
 
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+# Update memory to latest
+cd .agents/GenericKit-Agent-Memory && git pull origin master
+```
