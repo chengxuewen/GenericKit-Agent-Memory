@@ -1,0 +1,53 @@
+# GenericKit Project Knowledge — Auto-generated 2026-05-06
+
+## Project Overview
+- **Name**: GenericKit
+- **Purpose**: Multi-language FFI framework (Rust core + C/C++/Python/Wasm/Node/C#/Flutter bindings)
+- **Build**: `cargo build`, `cmake -B build-auto -S .`, `cmake --build build-auto`, `ctest --test-dir build-auto`
+- **Single crate constraint**: All code in `gkit-media`, no sub-crates
+
+## Module Layout
+```
+src/
+├── protocols/rtc/client/   # WebRTC (core.rs + native backends + google_lk)
+├── video/                  # Protocol-agnostic media (source_sink, buffer, frame, convert, transform, adapter)
+├── capture/generator.rs    # VideoFrameGenerator + SquarePattern
+└── build-sys/              # Google libwebrtc FFI (commented out)
+```
+
+## Key Patterns
+- **C FFI naming**: `gkit_<module>_<subsystem>_<resource>_<verb>[_<qualifier>]`
+- **Commit format**: `<feat/fix/refactor/docs/test/chore>: description`
+- **Features**: `backend-native-webrtc-rs` (default), `backend-native-google`, `backend-wasm`
+- **Rust 2024 reserved keywords**: `gen` cannot be used as variable name
+- **VideoSource/VideoSink traits**: `&self` methods with interior Mutex mutability
+- **Broadcaster**: IS-A Sink and Source, fan-out with VideoSinkWants aggregation (MIN/MAX/LCM)
+
+## Implemented Modules
+- **VideoFrameGenerator**: SquarePattern (colored squares + 6x10 OpenCTK font timestamp YYYY-MM-DD HH:MM:SS.mmm, scale 3, semi-transparent bg), lazy-start thread
+- **VideoBroadcaster**: IS-A Sink+Source, wants aggregation
+- **VideoAdapter**: crop→scale→rate-limit
+- **DefaultAudioSource**: silence generator
+- **C FFI**: gkit_media_video_source_* (6 functions + callback)
+- **C++**: gkit::VideoSource RAII, ImGui square-gen example
+- **CMake**: GKitCargoExample.cmake reusable macro
+
+## Examples
+- `gkit-media-viewer`: static BMP transform viewer (egui)
+- `gkit-media-square-gen`: live generator display (egui), 640x480 30fps
+- `gkit-media-webrtc-loopback`: two-PC simulated loopback (egui), 1280x720 30fps
+- `gkit_media_cpp_example_viewer`: C++ ImGui BMP viewer
+- `gkit_media_cpp_example_square_gen`: C++ ImGui generator display
+
+## Bug Fixes Applied
+- NV21 I420→U/V swap correction
+- ImGui menu SameLine absolute → relative spacing
+- VideoSource trait &mut self → &self
+- Font encoding LSB→MSB then OpenCTK 6×10
+- Generator thread lazy-start (spawn on start())
+- NativePeerConnection/DataChannel closed-state checks
+
+## Memory Submodule
+- Path: `.agents/GenericKit-Agent-Memory/`
+- MCP: `@mem0/mcp` with `MEM0_DIR=.agents/GenericKit-Agent-Memory`
+- Cross-platform: `.mcp.json` for Claude Code/Codex, `.opencode/opencode.json` for OpenCode
